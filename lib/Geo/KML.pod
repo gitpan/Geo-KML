@@ -1,0 +1,152 @@
+=head1 NAME
+
+Geo::KML - produce GoogleEarth KML/KMZ files
+
+=head1 INHERITANCE
+
+ Geo::KML
+   is a XML::Compile::Schema
+
+=head1 SYNOPSIS
+
+  use Geo::KML;
+  my $kml = Geo::KML->new(version => '2.2.0');
+  $kml->writeKML($data);
+
+  my ($ns, $data) = Geo::KML->readKML('a.kmz');
+  defined $ns && $ns eq NS_KML_21
+     or die "don't understand content\n";
+
+=head1 DESCRIPTION
+
+KML is the information format for GoogleEarth, an abbreviation of Keyhole
+Markup Language.  Keyhole was the company bought by Google, which had
+developed the initial version of the GoogleEarth browser. The first
+version of KML was XML without specs, but version 2 has clean schemas
+to it.
+
+WARNING: it seems that GoogleEarth is very forgiving for the message
+structure, for instance the order of elements.  XML::Compile, the base
+for this module, is not.  So: reading kml files will not always work,
+even when the GoogleEarth application accepts it.
+
+This module is intended to grow with knowledge and features about KML.
+Please contribute algorithms.
+
+=head1 METHODS
+
+Geo::KML-E<gt>B<new>(OPTIONS)
+
+=over 4
+
+ Option     --Default
+ compression  <filename dependent>
+ format       <depends>
+ version      <required>
+
+. compression => 0..9
+
+=over 4
+
+The compression to be used to write the KMZ ZIP-archives. 9 is best,
+0 means uncompressed.  The default is 6.  See the COMPRESSION_LEVEL_*
+constants defined by Archive::Zip.
+
+=back
+
+. format => 0..2
+
+=over 4
+
+Output format.  A value of '0' means: as compact as possible.  When
+compression is on, then the default is '0' (compact), otherwise '1'
+(readable).
+
+=back
+
+. version => STRING
+
+=over 4
+
+Which version of KML to read and/or write.
+
+=back
+
+=back
+
+=head2 Accessors
+
+$obj-E<gt>B<compression>([BOOLEAN])
+
+=over 4
+
+The level of compression (-1, 0..8) for the writer.  The optional BOOLEAN
+changes the setting.
+
+=back
+
+$obj-E<gt>B<format>([0..2])
+
+=over 4
+
+The output format.  With '0', it is optimally compact.
+
+=back
+
+$obj-E<gt>B<version>
+
+=over 4
+
+KML version, for instance '2.2.0'.
+
+=back
+
+=head2 Compilers
+
+Geo::KML-E<gt>B<readKML>(XMLDATA, [ZIPPED])
+
+=over 4
+
+Read KML from a source, which can be anything XML::Compile subroutine dataToXML
+accepts: filename, filehandle, scalar, and more.  Returned is a list of
+two: the type of the KML structure and it parsed content.
+
+example: 
+
+  my ($ns, $data) = Geo::KML->readKML('/tmp/a.kml');
+  my ($ns, $data) = Geo::KML->readKML(\*STDIN, 1);
+  if($ns eq NS_KML_220) ...
+
+=back
+
+$obj-E<gt>B<writeKML>(DATA, FILENAME|FILEHANDLE, [ZIPPED])
+
+=over 4
+
+If ZIPPED is true, or the filename ends with "kmz", a zip archive will
+get produced.  That archive will contain a single C<doc.kml> file.
+
+=back
+
+=head1 SEE ALSO
+
+This module is part of Geo-KML distribution version 0.01,
+built on June 16, 2008. Website: F<http://perl.overmeer.net/geo-kml>
+All modules in this suite:
+L</Geo::GML>,
+L</Geo::Point>,
+L</Geo::Proj4>,
+L</Geo::WKT>,
+L</Math::Polygon>
+
+Please post questions or ideas to
+F<http://geo-perl@list.hut.fi|the mailinglist>
+
+=head1 LICENSE
+
+Copyrights 2008 by Mark Overmeer. For other contributors see ChangeLog.
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+See F<http://www.perl.com/perl/misc/Artistic.html>
+

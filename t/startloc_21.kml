@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.1">
+<Document>
+	<name>startinglocation.kml</name>
+	<StyleMap id="PushPin">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#PushPin63</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#PushPin55</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="PushPin63">
+		<IconStyle>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pal3/icon63.png</href>
+			</Icon>
+		</IconStyle>
+	</Style>
+	<Style id="PushPin55">
+		<IconStyle>
+			<scale>1.1</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pal3/icon55.png</href>
+			</Icon>
+		</IconStyle>
+		<LabelStyle>
+			<scale>1.1</scale>
+		</LabelStyle>
+	</Style>
+	<Placemark id="default_starting_location">
+		<name>Netherlands</name>
+		<LookAt>
+			<longitude>5.750000000000001</longitude>
+			<latitude>52.5</latitude>
+			<altitude>0</altitude>
+			<range>11001000</range>
+			<tilt>0</tilt>
+			<heading>0</heading>
+		</LookAt>
+		<styleUrl>#PushPin</styleUrl>
+		<Point>
+			<coordinates>5.750000000000001,52.5,0</coordinates>
+		</Point>
+	</Placemark>
+</Document>
+</kml>

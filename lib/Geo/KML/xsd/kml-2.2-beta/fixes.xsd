@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  bug-fixes, discovered while testing
+-->
+
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:kml="http://earth.google.com/kml/2.2"
+        targetNamespace="http://earth.google.com/kml/2.2"
+        elementFormDefault="qualified">
+
+  <!-- taken from final -->
+  <complexType name="PlacemarkType" final="#all">
+    <complexContent>
+      <extension base="kml:AbstractFeatureType">
+        <sequence>
+          <element ref="kml:AbstractGeometryGroup" minOccurs="0"/>
+          <element ref="kml:AbstractViewGroup" minOccurs="0"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+
+</schema>

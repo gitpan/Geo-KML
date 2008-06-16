@@ -1,0 +1,19 @@
+--- #YAML:1.0
+name:                Geo-KML
+version:             0.01
+abstract:            Create GoogleEarth KML/KMZ
+license:             perl
+author:              
+    - Mark Overmeer
+generated_by:        ExtUtils::MakeMaker version 6.42
+distribution_type:   module
+requires:     
+    Archive::Zip:                  1.18
+    Log::Report:                   0.18
+    Test::Deep:                    0.095
+    Test::More:                    0.54
+    Test::Pod:                     1.00
+    XML::Compile:                  0.85
+meta-spec:
+    url:     http://module-build.sourceforge.net/META-spec-v1.3.html
+    version: 1.3

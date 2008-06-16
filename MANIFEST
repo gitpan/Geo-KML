@@ -1,0 +1,23 @@
+ChangeLog
+MANIFEST
+Makefile.PL
+README
+lib/Geo/KML.pm
+lib/Geo/KML.pod
+lib/Geo/KML/Util.pm
+lib/Geo/KML/Util.pod
+lib/Geo/KML/xsd/atom-2005/atom-author-link.xsd
+lib/Geo/KML/xsd/kml-2.1/kml21.xsd
+lib/Geo/KML/xsd/kml-2.2-beta/.kml22beta.xsd.swp
+lib/Geo/KML/xsd/kml-2.2-beta/fixes.xsd
+lib/Geo/KML/xsd/kml-2.2-beta/kml22beta.xsd
+lib/Geo/KML/xsd/kml-2.2.0/ReadMe.txt
+lib/Geo/KML/xsd/kml-2.2.0/ogckml22.xsd
+lib/Geo/KML/xsd/xal-2.0/xAL.xsd
+t/01use.t
+t/10read21.t
+t/20read22b.t
+t/pod.t
+t/pyram_22b.kmz
+t/startloc_21.kml
+META.yml                                 Module meta-data (added by MakeMaker)
