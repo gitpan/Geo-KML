@@ -5,7 +5,7 @@ Geo::KML - produce GoogleEarth KML/KMZ files
 =head1 INHERITANCE
 
  Geo::KML
-   is a XML::Compile::Schema
+   is a XML::Compile::Cache
 
 =head1 SYNOPSIS
 
@@ -15,7 +15,7 @@ Geo::KML - produce GoogleEarth KML/KMZ files
 
   my ($ns, $data) = Geo::KML->readKML('a.kmz');
   defined $ns && $ns eq NS_KML_21
-     or die "don't understand content\n";
+      or die "don't understand file content\n";
 
 =head1 DESCRIPTION
 
@@ -27,7 +27,7 @@ to it.
 
 WARNING: it seems that GoogleEarth is very forgiving for the message
 structure, for instance the order of elements.  XML::Compile, the base
-for this module, is not.  So: reading kml files will not always work,
+for this module, is not.  So: reading kml files may not always work,
 even when the GoogleEarth application accepts it.
 
 This module is intended to grow with knowledge and features about KML.
@@ -126,18 +126,22 @@ $obj-E<gt>B<writeKML>(DATA, FILENAME|FILEHANDLE, [ZIPPED])
 If ZIPPED is true, or the filename ends with "kmz", a zip archive will
 get produced.  That archive will contain a single C<doc.kml> file.
 
+You may skip the top-level Document element in the DATA structure.
+
 =back
 
 =head1 SEE ALSO
 
-This module is part of Geo-KML distribution version 0.01,
-built on June 16, 2008. Website: F<http://perl.overmeer.net/geo-kml>
+This module is part of Geo-KML distribution version 0.02,
+built on August 11, 2008. Website: F<http://perl.overmeer.net/geo-kml>
 All modules in this suite:
-L</Geo::GML>,
 L</Geo::Point>,
 L</Geo::Proj4>,
 L</Geo::WKT>,
-L</Math::Polygon>
+L</Math::Polygon>,
+L</Geo::GML>,
+L</Geo::ISO19139>, and
+L</Geo::EOP>.
 
 Please post questions or ideas to
 F<http://geo-perl@list.hut.fi|the mailinglist>

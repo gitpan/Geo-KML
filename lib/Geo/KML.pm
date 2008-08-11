@@ -8,9 +8,9 @@ use strict;
 
 package Geo::KML;
 use vars '$VERSION';
-$VERSION = '0.01';
+$VERSION = '0.02';
 
-use base 'XML::Compile::Schema';
+use base 'XML::Compile::Cache';
 
 use Log::Report 'geo-kml', syntax => 'SHORT';
 
@@ -27,6 +27,7 @@ my %ns2version  =
   , &NS_KML_22     => '2.2.0'
   );
 my %version2ns  = reverse %ns2version;
+my %implement;
 
 my %info =
   ( '2.1'   =>
@@ -49,7 +50,6 @@ my %info =
 
 sub init($)
 {   my ($self, $args) = @_;
-    $self->SUPER::init($args);
 
     my $version  =  $args->{version}
         or error __x"KML object requires an explicit version";
@@ -62,20 +62,26 @@ sub init($)
     $self->{GK_version}   = $version;
 
     my $info = $info{$version};
-    $self->{GK_prefixes} = $info->{prefixes};
 
     $self->compression($args->{compression} || COMPRESSION_LEVEL_DEFAULT);
     $self->format($args->{format});
 
-    (my $xsd = __FILE__) =~ s!\.pm!/xsd!;
-    my @xsds     = map {glob "$xsd/$_"} @{$info->{schemas}};
+    my $prefixes = $args->{prefixes} = $info->{prefixes};
+
+    $self->SUPER::init($args);
+    (my $xsd = __FILE__) =~ s!\.pm$!/xsd!;
+    my @xsds = map {glob "$xsd/$_"} @{$info->{schemas}};
 
     # don't worry, XML::Compile::Schema will parse each file only once,
     # so only the first KML object created will consume considerable time.
     $self->importDefinitions(\@xsds);
 
+    $self->declare(READER => 'kml', include_namespaces => 1);
+    $self->declare(WRITER => 'kml');
+
     $self;
 }
+
 
 #-----------------------------
 
@@ -96,8 +102,11 @@ sub format(;$)
 sub writeKML($$;$)
 {   my ($self, $data, $file, $zipped) = @_;
 
-    my $type   = pack_type $version2ns{$self->version}, 'kml';
-    my $writer = $self->{GK_writer}{$type} ||= $self->_createWriter($type);
+    # simplify coding a little
+    $data = { Document => $data }
+        if keys %$data > 1 || (%$data)[0] ne 'Document';
+
+    my $writer = $self->writer('kml');
     my $doc    = XML::LibXML::Document->new('1.0', 'UTF-8');
     my $xml    = $writer->($doc, $data);
     $doc->setDocumentElement($xml);
@@ -111,7 +120,7 @@ sub writeKML($$;$)
         my $member = $arch->addMember($doc->toString($format), KML_NAME_IN_KMZ);
         $member->desiredCompressionLevel($self->compression);
         
-        if(ref $file eq 'GLOB' || UNIVERSAL::ISA($file, 'IO::Handle'))
+        if(ref $file eq 'GLOB' || UNIVERSAL::isa($file, 'IO::Handle'))
         {   $arch->writeToFileHandle($file) == AZ_OK
                 or fault __x"cannot write zip to filehandle";
         }
@@ -123,21 +132,13 @@ sub writeKML($$;$)
     }
 
     defined $format or $format = 1;
-    if(ref $file eq 'GLOB' || UNIVERSAL::ISA($file, 'IO::Handle'))
+    if(ref $file eq 'GLOB' || UNIVERSAL::isa($file, 'IO::Handle'))
          { $doc->toFH  ($file, $format) }
     else { $doc->toFile($file, $format) }
 
     $self;
 }
 
-sub _createWriter($)
-{   my ($self, $type) = @_;
-    $self->compile
-      ( WRITER             => $type
-      , include_namespaces => 1
-      , output_namespaces  => $self->{GK_prefixes}
-      );
-}
 
 
 sub readKML($)
@@ -168,16 +169,8 @@ sub readKML($)
         or error __x"kml type {ns} in {source} not supported (yet)"
              , ns => $ns, source => $source;
 
-    my $kml     = $class->new(version => $version);
-    my $type    = type_of_node $root;
-    my $reader  = $kml->_createReader($type);
-
-    ($ns, $reader->($root));
+    my $kml     = $implement{$version} ||= $class->new(version => $version);
+    ($ns, $kml->reader('kml')->($root));
 }
 
-sub _createReader($)
-{   my ($self, $type) = @_;
-    $self->compile(READER => $type);
-}
-    
 1;

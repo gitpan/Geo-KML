@@ -18,6 +18,7 @@ $Data::Dumper::Indent = 1;
 my $infn = 't/pyram_22b.kmz';
 my ($ns, $data) = Geo::KML->readKML($infn);
 
+#warn Dumper $data;
 is($ns, NS_KML_22BETA);
 ok(defined $data);
 
@@ -28,5 +29,6 @@ open my($out), '>', \$buffer or die;
 $k22->writeKML($data, $out);
 close $out;
 #print $buffer;
+
 cmp_ok(length $buffer, '>', 100, 'write output produced');
 ok($buffer =~ m/\<kml /, 'not compressed');
