@@ -1,14 +1,14 @@
-# Copyrights 2008 by Mark Overmeer.
+# Copyrights 2008-2009 by Mark Overmeer.
 #  For other contributors see ChangeLog.
 # See the manual pages for details on the licensing terms.
-# Pod stripped from pm file by OODoc 1.05.
+# Pod stripped from pm file by OODoc 1.06.
 
 use warnings;
 use strict;
 
 package Geo::KML;
 use vars '$VERSION';
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 use base 'XML::Compile::Cache';
 
@@ -106,9 +106,8 @@ sub writeKML($$;$)
     $data = { Document => $data }
         if keys %$data > 1 || (%$data)[0] ne 'Document';
 
-    my $writer = $self->writer('kml');
     my $doc    = XML::LibXML::Document->new('1.0', 'UTF-8');
-    my $xml    = $writer->($doc, $data);
+    my $xml    = $self->writer('kml')->($doc, $data);
     $doc->setDocumentElement($xml);
 
     my $format = $self->format;
@@ -117,7 +116,7 @@ sub writeKML($$;$)
     if($zipped)
     {   my $arch   = Archive::Zip->new;
         defined $format or $format = 0;
-        my $member = $arch->addMember($doc->toString($format), KML_NAME_IN_KMZ);
+        my $member = $arch->addString($doc->toString($format), KML_NAME_IN_KMZ);
         $member->desiredCompressionLevel($self->compression);
         
         if(ref $file eq 'GLOB' || UNIVERSAL::isa($file, 'IO::Handle'))
@@ -139,11 +138,18 @@ sub writeKML($$;$)
     $self;
 }
 
+# name upto 0.02
+sub readKML($;$)
+{   my ($self, $data) = (shift, shift);
+    @_ ? $self->from($data, is_compressed => shift) : $self->from($data);
+}
 
 
-sub readKML($)
-{   my ($class, $source, $zipped) = @_;
-    $zipped ||= !ref $source && $source =~ m/\.kmz$/i;
+sub from($@)
+{   my ($class, $source, %args) = @_;
+    my $zipped = exists $args{is_compressed}
+               ? delete $args{is_compressed}
+               : !ref $source && $source =~ m/\.kmz$/i;
 
     if($zipped)
     {   my $arch = Archive::Zip->new;
@@ -170,7 +176,7 @@ sub readKML($)
              , ns => $ns, source => $source;
 
     my $kml     = $implement{$version} ||= $class->new(version => $version);
-    ($ns, $kml->reader('kml')->($root));
+    ($ns, $kml->reader('kml', %args)->($root));
 }
 
 1;

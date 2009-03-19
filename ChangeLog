@@ -1,6 +1,21 @@
 
 ==== version history for Geo::KML
 
+version 0.03: Thu Mar 19 09:21:11 CET 2009
+
+	Fixes:
+
+	- do not use /bin/pwd in t/pod.t
+
+	- use Archive::Tar::addString(), not ::addMember() do support older
+	  versions of Archive::Tar
+
+	Improvements
+
+	- deprecated readKML()
+
+	- implement from() as nicer alternative to readKML()
+
 version 0.02: Mon Aug 11 15:37:15 CEST 2008
 
 	Fixes:
@@ -12,6 +27,8 @@ version 0.02: Mon Aug 11 15:37:15 CEST 2008
 	- use XML::Compile::Cache as base
 
 	- no need for Document top-element in the writer.
+
+	- reuse created default reader objects.
 
 version 0.01: Mon Jun 16 13:00:30 CEST 2008
 	- initial release

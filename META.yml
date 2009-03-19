@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:                Geo-KML
-version:             0.02
+version:             0.03
 abstract:            Create GoogleEarth KML/KMZ
 license:             perl
 author:              

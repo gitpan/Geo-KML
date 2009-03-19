@@ -16,7 +16,7 @@ $Data::Dumper::Indent = 1;
 # the doc.html file was modified manual, to fix the order in the LookAt
 # structure.
 my $infn = 't/pyram_22b.kmz';
-my ($ns, $data) = Geo::KML->readKML($infn);
+my ($ns, $data) = Geo::KML->from($infn);
 
 #warn Dumper $data;
 is($ns, NS_KML_22BETA);

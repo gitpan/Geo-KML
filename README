@@ -1,5 +1,5 @@
-=== README for Geo-KML version 0.02
-=   Generated on Mon Aug 11 15:24:37 2008 by OODoc 1.05
+=== README for Geo-KML version 0.03
+=   Generated on Thu Mar 19 09:21:16 2009 by OODoc 1.06
 
 There are various ways to install this module:
 
@@ -9,16 +9,16 @@ There are various ways to install this module:
  (2) if you use Windows, have a look at http://ppm.activestate.com/
 
  (3) if you have downloaded this module manually (as root/administrator)
-       gzip -d Geo-KML-0.02.tar.gz
-       tar -xf Geo-KML-0.02.tar
-       cd Geo-KML-0.02
+       gzip -d Geo-KML-0.03.tar.gz
+       tar -xf Geo-KML-0.03.tar
+       cd Geo-KML-0.03
        perl Makefile.PL
        make          # optional
        make test     # optional
        make install
 
 For usage, see the included manual-pages or
-    http://search.cpan.org/dist/Geo-KML-0.02/
+    http://search.cpan.org/dist/Geo-KML-0.03/
 
 Please report problems to
     http://rt.cpan.org/Dist/Display.html?Queue=Geo-KML

@@ -13,10 +13,11 @@ use Data::Dumper;
 $Data::Dumper::Indent = 1;
 
 my $infn = 't/startloc_21.kml';
-my ($ns, $data) = Geo::KML->readKML($infn);
+my ($ns, $data) = Geo::KML->from($infn);
 
 is($ns, NS_KML_21);
 ok(defined $data);
+#warn Dumper $data;
 
 my $k21 = Geo::KML->new(version => '2.1');
 

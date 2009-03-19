@@ -13,7 +13,7 @@ Geo::KML - produce GoogleEarth KML/KMZ files
   my $kml = Geo::KML->new(version => '2.2.0');
   $kml->writeKML($data);
 
-  my ($ns, $data) = Geo::KML->readKML('a.kmz');
+  my ($ns, $data) = Geo::KML->from('a.kmz');
   defined $ns && $ns eq NS_KML_21
       or die "don't understand file content\n";
 
@@ -103,18 +103,35 @@ KML version, for instance '2.2.0'.
 
 =head2 Compilers
 
-Geo::KML-E<gt>B<readKML>(XMLDATA, [ZIPPED])
+Geo::KML-E<gt>B<from>(XMLDATA, OPTIONS)
 
 =over 4
 
-Read KML from a source, which can be anything XML::Compile subroutine dataToXML
-accepts: filename, filehandle, scalar, and more.  Returned is a list of
-two: the type of the KML structure and it parsed content.
+[release 0.03] Read KML from a source, which can be anything
+XML::Compile subroutine dataToXML accepts: filename, filehandle, scalar,
+and more.  Returned is a list of two: the type of the KML structure and
+it parsed content.
+
+You call use ALL options which are provided by
+XML::Compile::Schema subroutine compile, for instance C<sloppy_integers>
+and C<sloppy_floats>.
+
+ Option       --Default
+ is_compressed  <auto>
+
+. is_compressed => BOOLEAN
+
+=over 4
+
+When possible, automatically detected from the XMLDATA.  However, when
+the XMLDATA is a file-handle, you may need to set this flag.
+
+=back
 
 example: 
 
   my ($ns, $data) = Geo::KML->readKML('/tmp/a.kml');
-  my ($ns, $data) = Geo::KML->readKML(\*STDIN, 1);
+  my ($ns, $data) = Geo::KML->readKML(\*STDIN, is_compressed => 1);
   if($ns eq NS_KML_220) ...
 
 =back
@@ -132,23 +149,25 @@ You may skip the top-level Document element in the DATA structure.
 
 =head1 SEE ALSO
 
-This module is part of Geo-KML distribution version 0.02,
-built on August 11, 2008. Website: F<http://perl.overmeer.net/geo-kml>
+This module is part of Geo-KML distribution version 0.03,
+built on March 19, 2009. Website: F<http://perl.overmeer.net/geo-kml>
 All modules in this suite:
 L</Geo::Point>,
 L</Geo::Proj4>,
 L</Geo::WKT>,
 L</Math::Polygon>,
 L</Geo::GML>,
-L</Geo::ISO19139>, and
-L</Geo::EOP>.
+L</Geo::ISO19139>,
+L</Geo::EOP>,
+L</Geo::Format::Envisat>, and
+L</Geo::Format::Landsat>.
 
-Please post questions or ideas to
-F<http://geo-perl@list.hut.fi|the mailinglist>
+Please post questions or ideas to the mailinglist at
+F<http://geo-perl@list.hut.fi>
 
 =head1 LICENSE
 
-Copyrights 2008 by Mark Overmeer. For other contributors see ChangeLog.
+Copyrights 2008-2009 by Mark Overmeer. For other contributors see ChangeLog.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

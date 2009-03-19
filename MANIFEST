@@ -17,7 +17,7 @@ t/01use.t
 t/10read21.t
 t/20read22b.t
 t/21write220.t
-t/pod.t
+t/99pod.t
 t/pyram_22b.kmz
 t/startloc_21.kml
 META.yml                                 Module meta-data (added by MakeMaker)
