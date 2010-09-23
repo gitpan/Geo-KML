@@ -11,13 +11,15 @@ lib/Geo/KML/xsd/kml-2.1/kml21.xsd
 lib/Geo/KML/xsd/kml-2.2-beta/fixes.xsd
 lib/Geo/KML/xsd/kml-2.2-beta/kml22beta.xsd
 lib/Geo/KML/xsd/kml-2.2.0/ReadMe.txt
+lib/Geo/KML/xsd/kml-2.2.0/kml22gx.xsd
 lib/Geo/KML/xsd/kml-2.2.0/ogckml22.xsd
 lib/Geo/KML/xsd/xal-2.0/xAL.xsd
 t/01use.t
 t/10read21.t
 t/20read22b.t
 t/21write220.t
-t/99pod.t
+t/22read220.t
 t/pyram_22b.kmz
 t/startloc_21.kml
+xt/99pod.t
 META.yml                                 Module meta-data (added by MakeMaker)

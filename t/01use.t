@@ -11,6 +11,7 @@ use Test::More tests => 2;
 my @show_versions =
  qw/Test::More
     XML::Compile
+    XML::Compile::Cache
     Log::Report
     Archive::Zip
    /;

@@ -11,7 +11,7 @@ Geo::KML - produce GoogleEarth KML/KMZ files
 
   use Geo::KML;
   my $kml = Geo::KML->new(version => '2.2.0');
-  $kml->writeKML($data);
+  $kml->writeKML($data, $filename);
 
   my ($ns, $data) = Geo::KML->from('a.kmz');
   defined $ns && $ns eq NS_KML_21
@@ -19,19 +19,44 @@ Geo::KML - produce GoogleEarth KML/KMZ files
 
 =head1 DESCRIPTION
 
-KML is the information format for GoogleEarth, an abbreviation of Keyhole
-Markup Language.  Keyhole was the company bought by Google, which had
-developed the initial version of the GoogleEarth browser. The first
-version of KML was XML without specs, but version 2 has clean schemas
-to it.
+KML is the information format for GoogleEarth, an abbreviation of
+Keyhole Markup Language.  Keyhole was the company bought by Google,
+which had developed the initial version of the GoogleEarth browser.
+KML can also be used as layer in GoogleMaps, although that does not
+support all the features (yet)
 
-WARNING: it seems that GoogleEarth is very forgiving for the message
-structure, for instance the order of elements.  XML::Compile, the base
-for this module, is not.  So: reading kml files may not always work,
-even when the GoogleEarth application accepts it.
+The first version of KML used XML without specs, but version 2 has
+clean schemas to it. Very complex schemas.
+
+WARNING: it seems that the GoogleEarth application is very forgiving
+for the message structure, for instance the order of elements and field
+validation.  XML::Compile, the base for this module, is not: it sticks
+strict to the schema.  So: reading kml files may not always work, even
+when the GoogleEarth application accepts it.
 
 This module is intended to grow with knowledge and features about KML.
-Please contribute algorithms.
+Please contribute algorithms. It would be nice to have transformations
+between KML specifications and pleasant abstract objects.
+
+=head2 data-structure
+
+Methods L<writeKML()|Geo::KML/"Compilers"> and C<readKML()> respectively produce and decode
+KML files. The Perl data structure to be used differs seriously between
+different KML releases; the KML file is close to the same, however KML
+2.2 schemas use a layered type system which will show itself in Perl.
+
+The easiest way to start, is to decode examples first. Go to
+F<ttp://code.google.com/apis/kml/documentation/kmlreference.html> and look
+for suitable examples. Then
+
+  use Geo::KML;
+  my $data = Geo::KML->readKML("example.kml");
+
+  use Data::Dumper;
+  $Data::Dumper::Indent = 1;
+  print Dumper $data;
+
+Also, take a look at the test-scripts in the distribution.
 
 =head1 METHODS
 
@@ -142,6 +167,8 @@ $obj-E<gt>B<writeKML>(DATA, FILENAME|FILEHANDLE, [ZIPPED])
 
 If ZIPPED is true, or the filename ends with "kmz", a zip archive will
 get produced.  That archive will contain a single C<doc.kml> file.
+Returned is the MIME-type of the produced data. which is either MIME_KML
+or MIME_KMZ (when zipped)
 
 You may skip the top-level Document element in the DATA structure.
 
@@ -149,8 +176,8 @@ You may skip the top-level Document element in the DATA structure.
 
 =head1 SEE ALSO
 
-This module is part of Geo-KML distribution version 0.03,
-built on March 19, 2009. Website: F<http://perl.overmeer.net/geo-kml>
+This module is part of Geo-KML distribution version 0.90,
+built on September 23, 2010. Website: F<http://perl.overmeer.net/geo-kml>
 All modules in this suite:
 L</Geo::Point>,
 L</Geo::Proj4>,
@@ -167,7 +194,7 @@ F<http://geo-perl@list.hut.fi>
 
 =head1 LICENSE
 
-Copyrights 2008-2009 by Mark Overmeer. For other contributors see ChangeLog.
+Copyrights 2008-2010 by Mark Overmeer. For other contributors see ChangeLog.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

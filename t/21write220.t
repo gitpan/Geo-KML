@@ -3,13 +3,12 @@
 use warnings;
 use strict;
 
-use lib 'lib';
-use lib '../LogReport/lib', '../XMLCache/lib', '../XMLCompile/lib';
-
 use Test::More tests => 2;
 
 use Geo::KML;
-#use Log::Report mode => 3;
+use Geo::KML::Util qw/MIME_KML/;
+
+#use Log::Report mode => 3;  # XML debugging
 
 use Data::Dumper;
 $Data::Dumper::Indent = 1;
@@ -25,8 +24,12 @@ my %yapc2008 =
   , Point => { coordinates => [ "$long,$lat,0" ] }
   );
 
-my $data = { AbstractFeatureGroup => [ {Placemark => \%yapc2008} ] };
+my $data = { Document =>
+ { AbstractFeatureGroup => [
+    { Placemark => \%yapc2008
+    } ]
+ } };
 #warn Dumper $data;
 
-$kml->writeKML($data, 'example.kml');
-ok(1);
+my $mime = $kml->writeKML($data, 'example.kml');
+is($mime, MIME_KML);

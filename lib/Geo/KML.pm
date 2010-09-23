@@ -1,4 +1,4 @@
-# Copyrights 2008-2009 by Mark Overmeer.
+# Copyrights 2008-2010 by Mark Overmeer.
 #  For other contributors see ChangeLog.
 # See the manual pages for details on the licensing terms.
 # Pod stripped from pm file by OODoc 1.06.
@@ -8,7 +8,7 @@ use strict;
 
 package Geo::KML;
 use vars '$VERSION';
-$VERSION = '0.03';
+$VERSION = '0.90';
 
 use base 'XML::Compile::Cache';
 
@@ -42,7 +42,8 @@ my %info =
     }
 
   , '2.2.0' =>
-    { prefixes => [ '' => NS_KML_220, atom => NS_ATOM_2005, xal => NS_XAL_20 ]
+    { prefixes => [ '' => NS_KML_220, atom => NS_ATOM_2005, xal => NS_XAL_20
+                  , gx => NS_KML_EXT_22 ]
     , schemas  => [ 'kml-2.2.0/*.xsd', 'atom-2005/*.xsd', 'xal-2.0/*.xsd' ]
     }
   );
@@ -69,14 +70,19 @@ sub init($)
     my $prefixes = $args->{prefixes} = $info->{prefixes};
 
     $self->SUPER::init($args);
-    (my $xsd = __FILE__) =~ s!\.pm$!/xsd!;
+    (my $xsd = __FILE__) =~ s,\.pm$,/xsd,;
     my @xsds = map {glob "$xsd/$_"} @{$info->{schemas}};
 
-    # don't worry, XML::Compile::Schema will parse each file only once,
+    # don''t worry, XML::Compile::Schema will parse each file only once,
     # so only the first KML object created will consume considerable time.
     $self->importDefinitions(\@xsds);
 
-    $self->declare(READER => 'kml', include_namespaces => 1);
+    $self->declare(READER => 'kml'
+      , include_namespaces => 1
+      , mixed_elements     => 'TEXTUAL'
+      , sloppy_floats      => 1
+      , sloppy_integers    => 1
+      );
     $self->declare(WRITER => 'kml');
 
     $self;
@@ -102,10 +108,6 @@ sub format(;$)
 sub writeKML($$;$)
 {   my ($self, $data, $file, $zipped) = @_;
 
-    # simplify coding a little
-    $data = { Document => $data }
-        if keys %$data > 1 || (%$data)[0] ne 'Document';
-
     my $doc    = XML::LibXML::Document->new('1.0', 'UTF-8');
     my $xml    = $self->writer('kml')->($doc, $data);
     $doc->setDocumentElement($xml);
@@ -127,7 +129,7 @@ sub writeKML($$;$)
         {   $arch->writeToFileNamed($file) == AZ_OK
                 or fault __x"cannot write zip to {fn}", fn => $file;
         }
-        return $self;
+        return MIME_KMZ;
     }
 
     defined $format or $format = 1;
@@ -135,7 +137,7 @@ sub writeKML($$;$)
          { $doc->toFH  ($file, $format) }
     else { $doc->toFile($file, $format) }
 
-    $self;
+    MIME_KML;
 }
 
 # name upto 0.02
