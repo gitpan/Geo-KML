@@ -8,7 +8,7 @@ use strict;
 
 package Geo::KML;
 use vars '$VERSION';
-$VERSION = '0.90';
+$VERSION = '0.91';
 
 use base 'XML::Compile::Cache';
 
@@ -18,6 +18,8 @@ use Geo::KML::Util;    # all constants
 use XML::Compile::Util qw/pack_type type_of_node/;
 use XML::Compile       ();
 use Archive::Zip       qw/AZ_OK COMPRESSION_LEVEL_DEFAULT/;
+
+use Data::Dumper;
 
 use constant KML_NAME_IN_KMZ => 'doc.kml';
 
@@ -45,6 +47,9 @@ my %info =
     { prefixes => [ '' => NS_KML_220, atom => NS_ATOM_2005, xal => NS_XAL_20
                   , gx => NS_KML_EXT_22 ]
     , schemas  => [ 'kml-2.2.0/*.xsd', 'atom-2005/*.xsd', 'xal-2.0/*.xsd' ]
+
+    , hooks_r  => [ { type => 'colorType', replace => \&color_hex_read } ]
+    , hooks_w  => [ { type => 'colorType', replace => \&color_hex_write} ]
     }
   );
 
@@ -64,12 +69,22 @@ sub init($)
 
     my $info = $info{$version};
 
-    $self->compression($args->{compression} || COMPRESSION_LEVEL_DEFAULT);
-    $self->format($args->{format});
+    $self->compression(delete $args->{compression} ||COMPRESSION_LEVEL_DEFAULT);
+    $self->format(delete $args->{format});
 
-    my $prefixes = $args->{prefixes} = $info->{prefixes};
+    push @{$args->{prefixes}}, @{$info->{prefixes} || []};
+
+    unshift @{$args->{opts_readers}}
+      , mixed_elements     => 'TEXTUAL'
+      , sloppy_floats      => 1
+      , sloppy_integers    => 1
+      , hooks              => $info->{hooks_r};
+
+    unshift @{$args->{opts_writers}}
+      , hooks              => $info->{hooks_w};
 
     $self->SUPER::init($args);
+
     (my $xsd = __FILE__) =~ s,\.pm$,/xsd,;
     my @xsds = map {glob "$xsd/$_"} @{$info->{schemas}};
 
@@ -77,14 +92,8 @@ sub init($)
     # so only the first KML object created will consume considerable time.
     $self->importDefinitions(\@xsds);
 
-    $self->declare(READER => 'kml'
-      , include_namespaces => 1
-      , mixed_elements     => 'TEXTUAL'
-      , sloppy_floats      => 1
-      , sloppy_integers    => 1
-      );
+    $self->declare(READER => 'kml', include_namespaces => 1);
     $self->declare(WRITER => 'kml');
-
     $self;
 }
 
@@ -179,6 +188,31 @@ sub from($@)
 
     my $kml     = $implement{$version} ||= $class->new(version => $version);
     ($ns, $kml->reader('kml', %args)->($root));
+}
+
+# IMO, the KML design makes a mistake in defining colors as hexBinary.
+# The colors are integer values, in the program represented by things
+# like 0xff34135, not binary blobs.  The following hooks make this work.
+# Without those hooks, you would have to write pack("N", $color) all the
+# time.
+
+sub color_hex_read(@)
+{   my ($elem, $reader, $path, $label, $replaced) = @_;
+
+    my $text = $elem->textContent;
+    $text =~ s/\s//g;
+
+    my $value = unpack 'N', pack 'H8', $text;    # parse hex value into int.
+    ($label => $value);
+}
+
+sub color_hex_write(@)
+{   my ($doc, $value, $path, $label, $replaced) = @_;
+    defined $value or return;  # for template
+
+    my $node = $doc->createElement($label);
+    $node->appendText(unpack 'H8', pack "N", $value);
+    $node;
 }
 
 1;

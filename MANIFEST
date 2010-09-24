@@ -19,6 +19,8 @@ t/10read21.t
 t/20read22b.t
 t/21write220.t
 t/22read220.t
+t/23templ220.t
+t/24color220.t
 t/pyram_22b.kmz
 t/startloc_21.kml
 xt/99pod.t

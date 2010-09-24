@@ -60,7 +60,7 @@ my $expected =
     AbstractStyleSelectorGroup => [
       { Style => {
           BalloonStyle => {
-            bgColor => "\x{ff}\x{ff}\x{ff}\x{bb}",
+            bgColor => 0xffffffbb,
             text => '
       <b><font color="#CC0000" size="+3">$[name]</font></b>
       <br/><br/>
@@ -205,7 +205,7 @@ my $data2 = Geo::KML->readKML( <<'_KML' );
             <altitudeMode>relativeToGround</altitudeMode>
           </LookAt>
         </gx:FlyTo>
-        
+ 
         <gx:AnimatedUpdate>
           <gx:duration>0.0</gx:duration>
           <Update>
@@ -296,9 +296,7 @@ my $expected2 = {
                             { Placemark => {
                                 targetId => 'underwater1',
                                 AbstractFeatureSimpleExtensionGroup => [
-                                  { balloonVisibility => 1
-                                  }
-                                ]
+                                  { balloonVisibility => 1 } ]
                               }
                             }
                           ]
@@ -319,8 +317,7 @@ my $expected2 = {
                             { Placemark => {
                                 targetId => 'underwater1',
                                 AbstractFeatureSimpleExtensionGroup => [
-                                  { balloonVisibility => 0 }
-                                ]
+                                  { balloonVisibility => 0 } ]
                               }
                             }
                           ]
@@ -354,8 +351,7 @@ my $expected2 = {
                             { Placemark => {
                                 targetId => 'underwater2',
                                 AbstractFeatureSimpleExtensionGroup => [
-                                  { balloonVisibility => 1 }
-                                ]
+                                  { balloonVisibility => 1 } ]
                               }
                             }
                           ]
@@ -376,8 +372,7 @@ my $expected2 = {
                             { Placemark => {
                                 targetId => 'underwater2',
                                 AbstractFeatureSimpleExtensionGroup => [
-                                  { balloonVisibility => 0 }
-                                ]
+                                  { balloonVisibility => 0 } ]
                               }
                             }
                           ]
@@ -389,7 +384,8 @@ my $expected2 = {
                   duration => '0.0'
                 }
               },
-              { FlyTo => {
+              {
+                FlyTo => {
                   LookAt => {
                     longitude => '-119.849578',
                     latitude => '33.968515',
@@ -411,8 +407,7 @@ my $expected2 = {
                             { Placemark => {
                                 targetId => 'onland',
                                 AbstractFeatureSimpleExtensionGroup => [
-                                  { balloonVisibility => 1 }
-                                ]
+                                  { balloonVisibility => 1 } ]
                               }
                             }
                           ]
@@ -442,7 +437,8 @@ my $expected2 = {
           }
         }
       },
-      { Placemark => {
+      {
+        Placemark => {
           name => 'Still swimming...',
           id => 'underwater2',
           description => 'Were about to leave the ocean, and visit the coast...',

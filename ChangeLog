@@ -1,7 +1,14 @@
 
 ==== version history for Geo::KML
 
-version 0.90:
+version 0.91: Fri Sep 24 21:46:28 CEST 2010
+
+	Changes:
+
+	- hook color code processing, to avoid working with binary
+	  strings for colors.
+
+version 0.90: Thu Sep 23 10:10:13 CEST 2010
 
 	Changes:
 

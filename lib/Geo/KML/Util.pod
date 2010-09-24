@@ -41,8 +41,8 @@ MIME_KML, MIME_KMZ
 
 =head1 SEE ALSO
 
-This module is part of Geo-KML distribution version 0.90,
-built on September 23, 2010. Website: F<http://perl.overmeer.net/geo-kml>
+This module is part of Geo-KML distribution version 0.91,
+built on September 24, 2010. Website: F<http://perl.overmeer.net/geo-kml>
 All modules in this suite:
 L</Geo::Point>,
 L</Geo::Proj4>,

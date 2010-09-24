@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               Geo-KML
-version:            0.90
+version:            0.91
 abstract:           Create GoogleEarth and -Map KML/KMZ
 author:
     - Mark Overmeer
@@ -14,7 +14,7 @@ requires:
     Archive::Zip:         1.3
     Log::Report:          0.28
     Test::More:           0.54
-    XML::Compile:         1.17
+    XML::Compile:         1.18
     XML::Compile::Cache:  0.96
 no_index:
     directory:
