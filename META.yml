@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               Geo-KML
-version:            0.91
+version:            0.92
 abstract:           Create GoogleEarth and -Map KML/KMZ
 author:
     - Mark Overmeer
@@ -12,10 +12,11 @@ build_requires:
     ExtUtils::MakeMaker:  0
 requires:
     Archive::Zip:         1.3
+    Data::Peek:           0.32
     Log::Report:          0.28
     Test::More:           0.54
     XML::Compile:         1.18
-    XML::Compile::Cache:  0.96
+    XML::Compile::Cache:  0.97
 no_index:
     directory:
         - t

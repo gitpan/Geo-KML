@@ -46,8 +46,8 @@ different KML releases; the KML file is close to the same, however KML
 2.2 schemas use a layered type system which will show itself in Perl.
 
 The easiest way to start, is to decode examples first. Go to
-F<ttp://code.google.com/apis/kml/documentation/kmlreference.html> and look
-for suitable examples. Then
+F<http://code.google.com/apis/kml/documentation/kmlreference.html>
+and look for suitable examples. Then
 
   use Geo::KML;
   my $data = Geo::KML->readKML("example.kml");
@@ -176,8 +176,8 @@ You may skip the top-level Document element in the DATA structure.
 
 =head1 SEE ALSO
 
-This module is part of Geo-KML distribution version 0.91,
-built on September 24, 2010. Website: F<http://perl.overmeer.net/geo-kml>
+This module is part of Geo-KML distribution version 0.92,
+built on December 24, 2010. Website: F<http://perl.overmeer.net/geo-kml>
 All modules in this suite:
 L</Geo::Point>,
 L</Geo::Proj4>,

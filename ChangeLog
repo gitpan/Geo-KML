@@ -1,6 +1,18 @@
 
 ==== version history for Geo::KML
 
+version 0.92: Fri Dec 24 11:15:46 CET 2010
+
+	Fixes:
+
+	- link typo in documentation.
+	  rt.cpan.org #63477 [Frank Wiegand]
+
+	Improvements:
+
+	- colors only did accept integers, like 0x123456, but now also
+	  accept strings like '123456'
+
 version 0.91: Fri Sep 24 21:46:28 CEST 2010
 
 	Changes:

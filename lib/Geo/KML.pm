@@ -8,7 +8,7 @@ use strict;
 
 package Geo::KML;
 use vars '$VERSION';
-$VERSION = '0.91';
+$VERSION = '0.92';
 
 use base 'XML::Compile::Cache';
 
@@ -18,6 +18,7 @@ use Geo::KML::Util;    # all constants
 use XML::Compile::Util qw/pack_type type_of_node/;
 use XML::Compile       ();
 use Archive::Zip       qw/AZ_OK COMPRESSION_LEVEL_DEFAULT/;
+use Data::Peek         qw/DDual/;
 
 use Data::Dumper;
 
@@ -211,7 +212,12 @@ sub color_hex_write(@)
     defined $value or return;  # for template
 
     my $node = $doc->createElement($label);
-    $node->appendText(unpack 'H8', pack "N", $value);
+    my ($pv, $iv) = (DDual $value)[0,1];
+    my $text = defined $iv  # integer value prevails
+      ? (unpack 'H8', pack "N", $value)
+      : $pv;   # validation by XML
+
+    $node->appendText($text);
     $node;
 }
 

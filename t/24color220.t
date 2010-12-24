@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 7;
+use Test::More tests => 9;
 
 use Geo::KML;
 use XML::LibXML;
@@ -29,6 +29,9 @@ _XML
 my $xml = $w->($doc, 0x12345678);
 is($xml->toString."\n", $xmlexp, 'encoding');
 
+$xml = $w->($doc, '12345678');
+is($xml->toString."\n", $xmlexp, 'string');
+
 my $data = $r->($xmlexp);
 cmp_ok($data, '==', 0x12345678, 'decoding');
 
@@ -39,6 +42,9 @@ _XML
 
 my $xml2 = $w->($doc, 0x12);
 is($xml2->toString."\n", $xmlexp2, 'encoding');
+
+$xml2 = $w->($doc, '00000012');
+is($xml2->toString."\n", $xmlexp2, 'string');
 
 my $data2 = $r->($xmlexp2);
 cmp_ok($data2, '==', 0x12, 'decoding');

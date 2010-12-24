@@ -4,13 +4,14 @@ use 5.008;
 
 WriteMakefile
  ( NAME	 	=> 'Geo::KML'
- , VERSION	=> '0.91'
+ , VERSION	=> '0.92'
  , PREREQ_PM    =>
    { XML::Compile        => 1.18
-   , XML::Compile::Cache => 0.96
+   , XML::Compile::Cache => 0.97
    , Log::Report         => 0.28
    , Archive::Zip        => 1.30
    , Test::More          => 0.54
+   , Data::Peek          => 0.32
    }
  , EXE_FILES    => [ ]
  , AUTHOR       => 'Mark Overmeer'
