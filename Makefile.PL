@@ -4,7 +4,7 @@ use 5.008;
 
 WriteMakefile
  ( NAME	 	=> 'Geo::KML'
- , VERSION	=> '0.92'
+ , VERSION	=> '0.93'
  , PREREQ_PM    =>
    { XML::Compile        => 1.18
    , XML::Compile::Cache => 0.97

@@ -2,6 +2,10 @@ ChangeLog
 MANIFEST
 Makefile.PL
 README
+examples/doc.kml
+examples/kml-decode.pl
+examples/kml-explain.pl
+examples/point.kml
 lib/Geo/KML.pm
 lib/Geo/KML.pod
 lib/Geo/KML/Util.pm

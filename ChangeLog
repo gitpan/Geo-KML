@@ -1,6 +1,17 @@
 
 ==== version history for Geo::KML
 
+version 0.93: Thu Jun  9 15:54:21 CEST 2011
+
+	Improvements:
+
+	- Geo::KML::from now also accepts kmz files which are passed as
+	  scalars and strings.
+
+	- added some example files and scripts.
+
+	- documentation updates.
+
 version 0.92: Fri Dec 24 11:15:46 CET 2010
 
 	Fixes:

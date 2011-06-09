@@ -1,14 +1,14 @@
-# Copyrights 2008-2010 by Mark Overmeer.
+# Copyrights 2008-2011 by Mark Overmeer.
 #  For other contributors see ChangeLog.
 # See the manual pages for details on the licensing terms.
-# Pod stripped from pm file by OODoc 1.06.
+# Pod stripped from pm file by OODoc 2.00.
 
 use warnings;
 use strict;
 
 package Geo::KML;
 use vars '$VERSION';
-$VERSION = '0.92';
+$VERSION = '0.93';
 
 use base 'XML::Compile::Cache';
 
@@ -163,19 +163,15 @@ sub from($@)
                ? delete $args{is_compressed}
                : !ref $source && $source =~ m/\.kmz$/i;
 
-    if($zipped)
-    {   my $arch = Archive::Zip->new;
-        $arch->read($source) == AZ_OK
-            or fault __x"cannot read zip headers from {s}", s => $source;
+    $source = $class->fromZipped($source)
+        if $zipped;
 
-        my $kml  = $arch->memberNamed(KML_NAME_IN_KMZ);
-        my $buffer = '';
-        open DOC, '>', \$buffer;
-        $kml->extractToFileHandle(\*DOC) == AZ_OK
-            or fault __x"failed extracting kml from zip {s}", s => $source;
-        close DOC;
-        $source = \$buffer;
-    }
+if(open TR, '>', '/tmp/kml-trace')
+{ #print TR $root->toString(1);
+print TR "###\n\n";
+print TR ref $source ? $$source : $source;
+close TR;
+}
 
     my ($root, %details) = XML::Compile->dataToXML($source);
 
@@ -189,6 +185,46 @@ sub from($@)
 
     my $kml     = $implement{$version} ||= $class->new(version => $version);
     ($ns, $kml->reader('kml', %args)->($root));
+}
+
+sub fromZipped($)
+{   my ($class, $source) = @_;
+    my $arch = Archive::Zip->new;
+
+    # Archive::Zip can only read from files and filehandles
+    if(!ref $source && $source !~ m/^\s*\</)
+    {   # a string which is not XML -> filename
+        $arch->read($source)==AZ_OK
+            or fault __x"cannot read zip headers from file {s}", s => $source;
+    }
+    else
+    {   # either is a filehandle, or should be turned into one
+        my ($fh, $name);
+        if(!ref $source)                 # string with XML
+        {   open $fh, '<', \$source;
+            $name = 'string';
+        }
+        elsif(ref $source eq 'SCALAR')   # ref-string with XML
+        {   open $fh, '<', $source;
+            $name = 'scalar';
+        }
+        else      # let's hope it is a filehandle (compatible)
+        {   $fh   = $source;
+            $name = 'filehandle';
+        }
+
+        $arch->readFromFileHandle($fh) == AZ_OK
+            or fault __x"cannot read zip headers from {s}", s => $source;
+    }
+
+    my $kml  = $arch->memberNamed(KML_NAME_IN_KMZ);
+    my $buffer = '';
+    open DOC, '>', \$buffer;
+    $kml->extractToFileHandle(\*DOC) == AZ_OK
+        or fault __x"failed extracting kml from zip {s}", s => $source;
+
+    close DOC;
+    \$buffer;
 }
 
 # IMO, the KML design makes a mistake in defining colors as hexBinary.
