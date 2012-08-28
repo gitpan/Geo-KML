@@ -28,4 +28,5 @@ t/24color220.t
 t/pyram_22b.kmz
 t/startloc_21.kml
 xt/99pod.t
-META.yml                                 Module meta-data (added by MakeMaker)
+META.yml                                 Module YAML meta-data (added by MakeMaker)
+META.json                                Module JSON meta-data (added by MakeMaker)

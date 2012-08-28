@@ -19,26 +19,6 @@ Geo::KML - produce GoogleEarth KML/KMZ files
 
 =head1 DESCRIPTION
 
-=head2 data-structure
-
-Methods L<writeKML()|Geo::KML/"Compilers"> and C<from()> respectively produce and decode
-KML files. The Perl data structure to be used differs seriously between
-different KML releases; the KML file is close to the same, however KML
-2.2 schemas use a layered type system which will show itself in Perl.
-
-The easiest way to start, is to decode examples first. Go to
-F<http://code.google.com/apis/kml/documentation/kmlreference.html>
-and look for suitable examples. Then
-
-  use Geo::KML;
-  my $data = Geo::KML->from("example.kml");
-
-  use Data::Dumper;
-  $Data::Dumper::Indent = 1;
-  print Dumper $data;
-
-Also, take a look in the examples directory of this distribution.
-
 KML is the information format for GoogleEarth, an abbreviation of
 I<Keyhole Markup Language>.  Keyhole was the company bought by Google,
 which had developed the initial version of the GoogleEarth browser.
@@ -60,7 +40,58 @@ does not support all the features (yet)  For I<maps>, the google cloud
 is used to translate KML into the JSON which the maps browser can handle.
 See F<http://code.google.com/apis/kml/documentation/kmlelementsinmaps.html>
 
+=head2 data-structure
+
+Methods L<writeKML()|Geo::KML/"Compilers"> and C<from()> respectively produce and decode
+KML files. The Perl data structure to be used differs seriously between
+different KML releases; the KML file is close to the same, however KML
+2.2 schemas use a layered type system which will show itself in Perl.
+
+The easiest way to start, is to decode examples first. Go to
+F<http://code.google.com/apis/kml/documentation/kmlreference.html>
+and look for suitable examples. Then
+
+  use Geo::KML;
+  my $data = Geo::KML->from("example.kml");
+
+  use Data::Dumper;
+  $Data::Dumper::Indent = 1;
+  print Dumper $data;
+
+Also, take a look in the examples directory of this distribution.
+
 =head1 METHODS
+
+=over 4
+
+=item Geo::KML-E<gt>B<new>(OPTIONS)
+
+ -Option     --Default
+  compression  <filename dependent>
+  format       <depends>
+  version      <required>
+
+=over 2
+
+=item compression => 0..9
+
+The compression to be used to write the KMZ ZIP-archives. 9 is best,
+0 means uncompressed.  The default is 6.  See the COMPRESSION_LEVEL_*
+constants defined by Archive::Zip.
+
+=item format => 0..2
+
+Output format.  A value of '0' means: as compact as possible.  When
+compression is on, then the default is '0' (compact), otherwise '1'
+(readable).
+
+=item version => STRING
+
+Which version of KML to read and/or write.
+
+=back
+
+=back
 
 =head2 Accessors
 
@@ -75,7 +106,7 @@ changes the setting.
 
 The output format.  With '0', it is optimally compact.
 
-=item $obj-E<gt>B<version>
+=item $obj-E<gt>B<version>()
 
 KML version, for instance '2.2.0'.
 
@@ -125,41 +156,10 @@ You may skip the top-level Document element in the DATA structure.
 
 =back
 
-=over 4
-
-=item Geo::KML-E<gt>B<new>(OPTIONS)
-
- -Option     --Default
-  compression  <filename dependent>
-  format       <depends>
-  version      <required>
-
-=over 2
-
-=item compression => 0..9
-
-The compression to be used to write the KMZ ZIP-archives. 9 is best,
-0 means uncompressed.  The default is 6.  See the COMPRESSION_LEVEL_*
-constants defined by Archive::Zip.
-
-=item format => 0..2
-
-Output format.  A value of '0' means: as compact as possible.  When
-compression is on, then the default is '0' (compact), otherwise '1'
-(readable).
-
-=item version => STRING
-
-Which version of KML to read and/or write.
-
-=back
-
-=back
-
 =head1 SEE ALSO
 
-This module is part of Geo-KML distribution version 0.93,
-built on June 09, 2011. Website: F<http://perl.overmeer.net/geo-kml>
+This module is part of Geo-KML distribution version 0.94,
+built on August 28, 2012. Website: F<http://perl.overmeer.net/geo-kml>
 All modules in this suite:
 L</Geo::Point>,
 L</Geo::Proj4>,
@@ -176,7 +176,7 @@ F<http://geo-perl@list.hut.fi>
 
 =head1 LICENSE
 
-Copyrights 2008-2011 by Mark Overmeer. For other contributors see ChangeLog.
+Copyrights 2008-2012 by [Mark Overmeer]. For other contributors see ChangeLog.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

@@ -1,0 +1,47 @@
+{
+   "abstract" : "Create GoogleEarth and -Map KML/KMZ",
+   "author" : [
+      "Mark Overmeer"
+   ],
+   "dynamic_config" : 1,
+   "generated_by" : "ExtUtils::MakeMaker version 6.6302, CPAN::Meta::Converter version 2.120921",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Geo-KML",
+   "no_index" : {
+      "directory" : [
+         "t",
+         "inc"
+      ]
+   },
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "0"
+         }
+      },
+      "configure" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "0"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Archive::Zip" : "1.3",
+            "Data::Peek" : "0.32",
+            "File::Temp" : "0",
+            "Log::Report" : "0.28",
+            "Test::More" : "0.54",
+            "XML::Compile" : "1.18",
+            "XML::Compile::Cache" : "0.97"
+         }
+      }
+   },
+   "release_status" : "stable",
+   "version" : "0.94"
+}

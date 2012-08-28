@@ -1,4 +1,4 @@
-# Copyrights 2008-2011 by Mark Overmeer.
+# Copyrights 2008-2012 by [Mark Overmeer].
 #  For other contributors see ChangeLog.
 # See the manual pages for details on the licensing terms.
 # Pod stripped from pm file by OODoc 2.00.
@@ -8,7 +8,7 @@ use strict;
 
 package Geo::KML;
 use vars '$VERSION';
-$VERSION = '0.93';
+$VERSION = '0.94';
 
 use base 'XML::Compile::Cache';
 
@@ -19,13 +19,16 @@ use XML::Compile::Util qw/pack_type type_of_node/;
 use XML::Compile       ();
 use Archive::Zip       qw/AZ_OK COMPRESSION_LEVEL_DEFAULT/;
 use Data::Peek         qw/DDual/;
+use File::Temp         qw/tempfile/;
+use Fcntl              qw/SEEK_SET/;
 
 use Data::Dumper;
 
 use constant KML_NAME_IN_KMZ => 'doc.kml';
 
 my %ns2version  =
-  ( &NS_KML_21     => '2.1'
+  ( &NS_KML_20     => '2.0'
+  , &NS_KML_21     => '2.1'
   , &NS_KML_22BETA => '2.2-beta'
   , &NS_KML_22     => '2.2.0'
   );
@@ -33,7 +36,12 @@ my %version2ns  = reverse %ns2version;
 my %implement;
 
 my %info =
-  ( '2.1'   =>
+  ( '2.0'   =>
+    { prefixes => [ '' => NS_KML_20 ]
+    , schemas  => [ 'kml-2.0/*.xsd' ]
+    }
+
+  , '2.1'   =>
     { prefixes => [ '' => NS_KML_21 ]
     , schemas  => [ 'kml-2.1/*.xsd' ]
     }
@@ -166,12 +174,12 @@ sub from($@)
     $source = $class->fromZipped($source)
         if $zipped;
 
-if(open TR, '>', '/tmp/kml-trace')
-{ #print TR $root->toString(1);
-print TR "###\n\n";
-print TR ref $source ? $$source : $source;
-close TR;
-}
+    # if(open TR, '>', '/tmp/kml-trace')
+    # {   print TR $root->toString(1);
+    #     print TR "###\n\n";
+    #     print TR ref $source ? $$source : $source;
+    #     close TR;
+    # }
 
     my ($root, %details) = XML::Compile->dataToXML($source);
 
@@ -191,31 +199,37 @@ sub fromZipped($)
 {   my ($class, $source) = @_;
     my $arch = Archive::Zip->new;
 
-    # Archive::Zip can only read from files and filehandles
+    # Archive::Zip can only read from files: it is very broken with
+    # respect to IO::File objects and PerlIO.  So: when the data is
+    # not a file, we have to create it.
+
+    my ($fh, $filename, $type);
     if(!ref $source && $source !~ m/^\s*\</)
-    {   # a string which is not XML -> filename
-        $arch->read($source)==AZ_OK
-            or fault __x"cannot read zip headers from file {s}", s => $source;
+    {   # string not KML-XML hence filename
+        ($type, $filename) = (file => $source);
     }
     else
-    {   # either is a filehandle, or should be turned into one
-        my ($fh, $name);
+    {   ($fh, $filename) = tempfile 'kmz-XXXXX'
+          , UNLINK  => 1, TMPDIR  => 1, SUFFIX  => '.zip';
+
         if(!ref $source)                 # string with XML
-        {   open $fh, '<', \$source;
-            $name = 'string';
+        {   print $fh $source;
+            $type = 'string';
         }
         elsif(ref $source eq 'SCALAR')   # ref-string with XML
-        {   open $fh, '<', $source;
-            $name = 'scalar';
+        {   print $fh $$source;
+            $type = 'scalar';
         }
         else      # let's hope it is a filehandle (compatible)
-        {   $fh   = $source;
-            $name = 'filehandle';
+        {   print {$fh} <$source>;
+            $type = 'filehandle';
         }
-
-        $arch->readFromFileHandle($fh) == AZ_OK
-            or fault __x"cannot read zip headers from {s}", s => $source;
+        seek $fh, 0, SEEK_SET;
     }
+
+    $arch->read($filename)==AZ_OK
+        or fault __x"cannot read zip headers from file {fn}, passed as {type}"
+             , fn => $filename, type => $type;
 
     my $kml  = $arch->memberNamed(KML_NAME_IN_KMZ);
     my $buffer = '';

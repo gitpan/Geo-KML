@@ -20,6 +20,13 @@ components, which on their own may be unrelated.
 
 =head2 Constants
 
+The following URIs are exported as constants, to avoid typinng
+in the same long URIs each time again.  These constants are,
+
+=head3 Tag group :kml20
+
+NS_KML_20 (KML namespace)
+
 =head3 Tag group :kml21
 
 NS_KML_21 (KML namespace)
@@ -36,13 +43,10 @@ NS_KML_22, NS_KML_220, NS_ATOM_2005, NS_XAL_20.
 
 MIME_KML, MIME_KMZ
 
-The following URIs are exported as constants, to avoid typinng
-in the same long URIs each time again.  These constants are,
-
 =head1 SEE ALSO
 
-This module is part of Geo-KML distribution version 0.93,
-built on June 09, 2011. Website: F<http://perl.overmeer.net/geo-kml>
+This module is part of Geo-KML distribution version 0.94,
+built on August 28, 2012. Website: F<http://perl.overmeer.net/geo-kml>
 All modules in this suite:
 L</Geo::Point>,
 L</Geo::Proj4>,
@@ -59,7 +63,7 @@ F<http://geo-perl@list.hut.fi>
 
 =head1 LICENSE
 
-Copyrights 2008-2011 by Mark Overmeer. For other contributors see ChangeLog.
+Copyrights 2008-2012 by [Mark Overmeer]. For other contributors see ChangeLog.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
