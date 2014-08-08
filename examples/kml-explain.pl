@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 #
 # Simple script to show the whole super complex structure which
 # the reader may produce resp. can be passed to the writer.

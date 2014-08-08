@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 #
 # Simple script to demonstrate how some KML or KMZ file gets decoded
 # into a Perl data-structure.

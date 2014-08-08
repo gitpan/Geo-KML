@@ -1,3 +1,5 @@
+=encoding utf8
+
 =head1 NAME
 
 Geo::KML - produce GoogleEarth KML/KMZ files
@@ -9,6 +11,10 @@ Geo::KML - produce GoogleEarth KML/KMZ files
 
 =head1 SYNOPSIS
 
+  *** THIS MODULE IS NOT MAINTAINED ANYMORE.  It can   ***
+  *** only run with XML::Compile <= 1.43  The schema's ***
+  *** are too messy to parse correctly.                ***
+
   use Geo::KML;
   my $kml = Geo::KML->new(version => '2.2.0');
   $kml->writeKML($data, $filename);
@@ -18,6 +24,15 @@ Geo::KML - produce GoogleEarth KML/KMZ files
       or die "don't understand file content\n";
 
 =head1 DESCRIPTION
+
+  *
+  ** You are probably not yet a user of this module.  Don't become
+  ** one!  Although KML has an official schema, that is defining
+  ** so complex recursive, that parsing usually breaks.  Also, many
+  ** KML files do not follow the schema: the order of elements is
+  ** strict in the schema, but not in the applications.
+  ** Use XML::(Compile::)Simple
+  *
 
 KML is the information format for GoogleEarth, an abbreviation of
 I<Keyhole Markup Language>.  Keyhole was the company bought by Google,
@@ -97,12 +112,12 @@ Which version of KML to read and/or write.
 
 =over 4
 
-=item $obj-E<gt>B<compression>([BOOLEAN])
+=item $obj-E<gt>B<compression>( [BOOLEAN] )
 
 The level of compression (-1, 0..8) for the writer.  The optional BOOLEAN
 changes the setting.
 
-=item $obj-E<gt>B<format>([0..2])
+=item $obj-E<gt>B<format>( [0..2] )
 
 The output format.  With '0', it is optimally compact.
 
@@ -145,7 +160,7 @@ example:
   my ($ns, $data) = Geo::KML->from(\*STDIN, is_compressed => 1);
   if($ns eq NS_KML_220) ...
 
-=item $obj-E<gt>B<writeKML>(DATA, FILENAME|FILEHANDLE, [ZIPPED])
+=item $obj-E<gt>B<writeKML>( DATA, FILENAME|FILEHANDLE, [ZIPPED] )
 
 If ZIPPED is true, or the filename ends with "kmz", a zip archive will
 get produced.  That archive will contain a single C<doc.kml> file.
@@ -158,8 +173,8 @@ You may skip the top-level Document element in the DATA structure.
 
 =head1 SEE ALSO
 
-This module is part of Geo-KML distribution version 0.94,
-built on August 28, 2012. Website: F<http://perl.overmeer.net/geo-kml>
+This module is part of Geo-KML distribution version 0.95,
+built on August 08, 2014. Website: F<http://perl.overmeer.net/geo-kml>
 All modules in this suite:
 L</Geo::Point>,
 L</Geo::Proj4>,
@@ -176,7 +191,7 @@ F<http://geo-perl@list.hut.fi>
 
 =head1 LICENSE
 
-Copyrights 2008-2012 by [Mark Overmeer]. For other contributors see ChangeLog.
+Copyrights 2008-2014 by [Mark Overmeer]. For other contributors see ChangeLog.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

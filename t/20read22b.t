@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 # test KML 2.20 reading, based on official examples
 use warnings;
 use strict;

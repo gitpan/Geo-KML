@@ -1,14 +1,14 @@
-# Copyrights 2008-2012 by [Mark Overmeer].
+# Copyrights 2008-2014 by [Mark Overmeer].
 #  For other contributors see ChangeLog.
 # See the manual pages for details on the licensing terms.
-# Pod stripped from pm file by OODoc 2.00.
+# Pod stripped from pm file by OODoc 2.01.
 
 use warnings;
 use strict;
 
 package Geo::KML;
 use vars '$VERSION';
-$VERSION = '0.94';
+$VERSION = '0.95';
 
 use base 'XML::Compile::Cache';
 
@@ -95,7 +95,7 @@ sub init($)
     $self->SUPER::init($args);
 
     (my $xsd = __FILE__) =~ s,\.pm$,/xsd,;
-    my @xsds = map {glob "$xsd/$_"} @{$info->{schemas}};
+    my @xsds = map +(glob "$xsd/$_"), @{$info->{schemas}};
 
     # don''t worry, XML::Compile::Schema will parse each file only once,
     # so only the first KML object created will consume considerable time.

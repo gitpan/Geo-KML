@@ -1,6 +1,13 @@
 
 ==== version history for Geo::KML
 
+version 0.95: Fri Aug  8 17:19:44 CEST 2014
+
+	Changes:
+
+	- disable support for this module, when XML::Compile > 1.43
+	  final release.
+
 version 0.94: Tue Aug 28 09:09:50 CEST 2012
 
 	Fixes:

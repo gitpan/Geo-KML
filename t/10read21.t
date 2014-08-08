@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 # test KML 2.1 reading, based on official examples
 use warnings;
 use strict;
@@ -8,6 +8,8 @@ use Test::More tests => 4;
 
 use Geo::KML;
 use Geo::KML::Util qw/NS_KML_21/;
+
+use Log::Report; # mode => 'DEBUG';
 
 use Data::Dumper;
 $Data::Dumper::Indent = 1;

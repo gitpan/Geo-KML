@@ -11,6 +11,7 @@ lib/Geo/KML.pod
 lib/Geo/KML/Util.pm
 lib/Geo/KML/Util.pod
 lib/Geo/KML/xsd/atom-2005/atom-author-link.xsd
+lib/Geo/KML/xsd/kml-2.0/kml.xsd
 lib/Geo/KML/xsd/kml-2.1/kml21.xsd
 lib/Geo/KML/xsd/kml-2.2-beta/fixes.xsd
 lib/Geo/KML/xsd/kml-2.2-beta/kml22beta.xsd

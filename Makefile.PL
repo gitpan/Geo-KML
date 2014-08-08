@@ -2,9 +2,17 @@ use ExtUtils::MakeMaker;
 
 use 5.008;
 
+eval "require XML::Compile";
+if(!$@)
+{   my $v = $XML::Compile::VERSION || 1.43;
+
+    # This limitation will not be lifted
+    die "Only works with XML::Compile <= 1.43, not $v" if $v ge 1.44;
+}
+
 WriteMakefile
  ( NAME	 	=> 'Geo::KML'
- , VERSION	=> '0.94'
+ , VERSION	=> '0.95'
  , PREREQ_PM    =>
    { XML::Compile        => 1.18
    , XML::Compile::Cache => 0.97
